@@ -11,6 +11,5 @@ public enum InputButton
 public struct PlayerInputData : INetworkInput
 {
     public Vector2 Direction;
-    public Vector2 LookDelta;
     public NetworkButtons Buttons;
 }

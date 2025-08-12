@@ -42,26 +42,27 @@ public class PlayerInputController : SimulationBehaviour, INetworkRunnerCallback
 
         NetworkButtons buttons = default;
 
-        Mouse mouse = Mouse.current;
-        if (mouse != null)
-        {
-            Vector2 mouseDelta = mouse.delta.ReadValue();
-            Vector2 lookRotationDelta = new Vector2(-mouseDelta.y, mouseDelta.x);
-            accumulateInput.LookDelta += lookRotationDelta;
-        }
+        // Mouse mouse = Mouse.current;
+        // if (mouse != null)
+        // {
+        //     Vector2 mouseDelta = mouse.delta.ReadValue();
+        //     Vector2 lookRotationDelta = new Vector2(-mouseDelta.y, mouseDelta.x);
+        //     accumulateInput.LookDelta += lookRotationDelta;
+        // }
 
         if (keyboard != null)
         {
             Vector2 moveDirection = Vector2.zero;
             if (keyboard.wKey.isPressed)
-                moveDirection += Vector2.down;
-            if (keyboard.sKey.isPressed)
                 moveDirection += Vector2.up;
+            if (keyboard.sKey.isPressed)
+                moveDirection += Vector2.down;
             if (keyboard.aKey.isPressed)
-                moveDirection += Vector2.right;
-            if (keyboard.dKey.isPressed)
                 moveDirection += Vector2.left;
+            if (keyboard.dKey.isPressed)
+                moveDirection += Vector2.right;
 
+            Debug.Log($"Move Direction: {moveDirection}");
             accumulateInput.Direction += moveDirection;
             buttons.Set(InputButton.Jump, keyboard.spaceKey.isPressed);
         }
@@ -74,9 +75,9 @@ public class PlayerInputController : SimulationBehaviour, INetworkRunnerCallback
         accumulateInput.Direction.Normalize();
         input.Set(accumulateInput);
         resetInput = true;
-
-        // We have to reset the look delta because we don't want to mouse input being reused if another tick is executed during the same frame
-        accumulateInput.LookDelta = default;
+        
+        // // We have to reset the look delta because we don't want to mouse input being reused if another tick is executed during the same frame
+        // accumulateInput.LookDelta = default;
     }
 
 
