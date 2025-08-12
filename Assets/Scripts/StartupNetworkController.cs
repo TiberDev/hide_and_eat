@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
@@ -29,18 +30,37 @@ public class StartupNetworkController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
-    public void Connect(GameMode serverMode)
+
+    public async void StartServer(GameMode serverMode)
+    {
+        // Show loading screen
+        Menu.Instance.SetScreen(Menu.ScreenType.Loading);
+        try
+        {
+            await Connect(serverMode);
+            Menu.Instance.SetScreen(Menu.ScreenType.GamePlay);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Failed to start server: " + ex.Message);
+            Menu.Instance.SetScreen(Menu.ScreenType.JoinRoom);
+        }
+    }
+
+    private async UniTask Connect(GameMode serverMode)
     {
         // Ensure the NetworkRunner prefab is instantiated only once
         networkRunnerPrefab = Instantiate(networkRunnerPrefab);
         networkRunnerPrefab.name = "NetworkRunner";
         DontDestroyOnLoad(networkRunnerPrefab);
-        
+
         // Get scene reference for the current scene
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
 
-        InitializeNetworkRunner(networkRunnerPrefab,serverMode, NetAddress.Any(), scene, null);
+        var serverTask = InitializeNetworkRunner(networkRunnerPrefab, serverMode, NetAddress.Any(), scene, null);
+
+        // Wait for the server to start
+        await serverTask;
     }
 
     protected virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, NetAddress address,
