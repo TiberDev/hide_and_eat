@@ -31,7 +31,7 @@ public class StartupNetworkController : MonoBehaviour
         }
     }
 
-    public async void StartServer(GameMode serverMode)
+    public async void StartConnecting(GameMode serverMode)
     {
         // Show loading screen
         Menu.Instance.SetScreen(Menu.ScreenType.Loading);

@@ -22,7 +22,8 @@ public class PlayerMovement : NetworkBehaviour
     public override void Spawned()
     {
         cachedTransform = transform;
-
+        
+        kcc.Collider.tag = "Player";
         kcc.SetGravity(Physics.gravity.y * 2f);
 
         if (HasInputAuthority)

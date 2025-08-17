@@ -70,12 +70,19 @@ public class Menu : MonoBehaviour
         }
 
         StartupNetworkController.Instance.RoomName = code;
-        StartupNetworkController.Instance.StartServer(GameMode.Host);
+        StartupNetworkController.Instance.StartConnecting(GameMode.Host);
     }
 
     private void OnJoinButtonClicked()
     {
-        throw new System.NotImplementedException();
+        var code = nicknameInputField.text;
+        if(string.IsNullOrWhiteSpace(code))
+        {
+            code = GenerateCodeRandom();
+        }
+        
+        StartupNetworkController.Instance.RoomName = code;
+        StartupNetworkController.Instance.StartConnecting(GameMode.Client);
     }
     
     private string GenerateCodeRandom(int length = 4)
