@@ -20,21 +20,21 @@ public class PlayerInputController : SimulationBehaviour, INetworkRunnerCallback
             accumulateInput = default;
         }
 
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard != null && (keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame ||
-                                 keyboard.escapeKey.wasPressedThisFrame))
-        {
-            if (Cursor.lockState == CursorLockMode.Locked)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        // Keyboard keyboard = Keyboard.current;
+        // if (keyboard != null && (keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame ||
+        //                          keyboard.escapeKey.wasPressedThisFrame))
+        // {
+        //     if (Cursor.lockState == CursorLockMode.Locked)
+        //     {
+        //         Cursor.lockState = CursorLockMode.None;
+        //         Cursor.visible = true;
+        //     }
+        // }
+        // else
+        // {
+        //     Cursor.lockState = CursorLockMode.Locked;
+        //     Cursor.visible = false;
+        // }
 
         // Accumulate input if the cursor is locked
         if (Cursor.lockState != CursorLockMode.Locked)
@@ -42,13 +42,7 @@ public class PlayerInputController : SimulationBehaviour, INetworkRunnerCallback
 
         NetworkButtons buttons = default;
 
-        // Mouse mouse = Mouse.current;
-        // if (mouse != null)
-        // {
-        //     Vector2 mouseDelta = mouse.delta.ReadValue();
-        //     Vector2 lookRotationDelta = new Vector2(-mouseDelta.y, mouseDelta.x);
-        //     accumulateInput.LookDelta += lookRotationDelta;
-        // }
+        Keyboard keyboard = Keyboard.current;
 
         if (keyboard != null)
         {
@@ -62,8 +56,25 @@ public class PlayerInputController : SimulationBehaviour, INetworkRunnerCallback
             if (keyboard.dKey.isPressed)
                 moveDirection += Vector2.right;
 
-            Debug.Log($"Move Direction: {moveDirection}");
-            accumulateInput.Direction += moveDirection;
+            // Get the camera a forward direction
+            Vector3 camForward = CameraFollow.Instance.Transform.forward;
+            camForward.y = 0;
+            camForward.Normalize();
+            Vector2 camForward2D = new Vector2(camForward.x, camForward.z);
+
+            // Get the camera a right direction
+            Vector3 camRight = CameraFollow.Instance.Transform.right;
+            camRight.y = 0;
+            camRight.Normalize();
+            Vector2 camRight2D = new Vector2(camRight.x, camRight.z);
+
+            Vector2 moveDir = camForward2D * moveDirection.y + camRight2D * moveDirection.x;
+            moveDir.Normalize();
+
+            Debug.Log(
+                $"Move Direction: {moveDirection}  moveDir: {moveDir} accumulateInput.Direction: {accumulateInput.Direction}      camForward: {camForward} camRight: {camRight}");
+            accumulateInput.Direction += moveDir;
+
             buttons.Set(InputButton.Jump, keyboard.spaceKey.isPressed);
         }
 
@@ -75,11 +86,21 @@ public class PlayerInputController : SimulationBehaviour, INetworkRunnerCallback
         accumulateInput.Direction.Normalize();
         input.Set(accumulateInput);
         resetInput = true;
-        
-        // // We have to reset the look delta because we don't want to mouse input being reused if another tick is executed during the same frame
-        // accumulateInput.LookDelta = default;
     }
 
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+    {
+        if (player == runner.LocalPlayer)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
@@ -89,23 +110,8 @@ public class PlayerInputController : SimulationBehaviour, INetworkRunnerCallback
     {
     }
 
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-    {
-        if (player == runner.LocalPlayer)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-    }
-
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)

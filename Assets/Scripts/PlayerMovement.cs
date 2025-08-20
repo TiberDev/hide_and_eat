@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using Fusion;
 using Fusion.Addons.SimpleKCC;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : NetworkBehaviour
 {
@@ -22,9 +20,9 @@ public class PlayerMovement : NetworkBehaviour
     public override void Spawned()
     {
         cachedTransform = transform;
-        
+
         kcc.Collider.tag = "Player";
-        kcc.SetGravity(Physics.gravity.y * 2f);
+        // kcc.SetGravity(Physics.gravity.y * 2f);
 
         if (HasInputAuthority)
         {
@@ -37,34 +35,43 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (GetInput(out PlayerInputData input))
         {
-            Vector3 moveDirection = new Vector3(input.Direction.x, 0, input.Direction.y);
-
-            // Get the camera a forward direction
-            Vector3 camForward = CameraFollow.Instance.Transform.forward;
-            camForward.y = 0;
-            camForward.Normalize();
-
-            // Get the camera a right direction
-            Vector3 camRight = CameraFollow.Instance.Transform.right;
-            camRight.y = 0;
-            camRight.Normalize();
-
-            Vector3 moveDir = camForward * moveDirection.z + camRight * moveDirection.x;
-            moveDir.Normalize();
+            // Vector3 moveDirection = new Vector3(input.Direction.x, 0, input.Direction.y);
+            //
+            // // Get the camera a forward direction
+            // Vector3 camForward = CameraFollow.Instance.Transform.forward;
+            // camForward.y = 0;
+            // camForward.Normalize();
+            //
+            // // Get the camera a right direction
+            // Vector3 camRight = CameraFollow.Instance.Transform.right;
+            // camRight.y = 0;
+            // camRight.Normalize();
+            //
+            // Vector3 moveDir = camForward * moveDirection.z + camRight * moveDirection.x;
+            // moveDir.Normalize();
             float jump = 0f;
 
             if (input.Buttons.WasPressed(PreviousButtons, InputButton.Jump) && kcc.IsGrounded)
                 jump = jumpForce;
+            
+            Vector3 moveDirection = new Vector3(input.Direction.x, 0, input.Direction.y);
+            var velocity = moveDirection * speed;
 
-            kcc.Move(moveDir.normalized * speed, jump);
             PreviousButtons = input.Buttons;
 
-            // Rotate the player to face the movement direction
-            if (moveDir.x == 0 && moveDir.z == 0) return;
-            Vector3 lookDir = new Vector3(-moveDir.x, 0, -moveDir.z);
-            Debug.Log($"Look Direction: {lookDir}");
-            Quaternion targetRot = Quaternion.LookRotation(lookDir);
-            kcc.SetLookRotation(Quaternion.Slerp(cachedTransform.rotation, targetRot, 0.2f));
+            if (Object.HasStateAuthority)
+            {
+                kcc.Move(velocity, jump);
+                Debug.Log(
+                    $"Instance ID: {GetInstanceID()} velocity: {velocity}");
+            }
+
+            // // Rotate the player to face the movement direction
+            // if (moveDir.x == 0 && moveDir.z == 0) return;
+            // Vector3 lookDir = new Vector3(-moveDir.x, 0, -moveDir.z);
+            // Debug.Log($"Instance ID: {GetInstanceID()}  Look Direction: {lookDir}");
+            // Quaternion targetRot = Quaternion.LookRotation(lookDir);
+            // kcc.SetLookRotation(Quaternion.Slerp(cachedTransform.rotation, targetRot, 0.2f));
         }
     }
 }

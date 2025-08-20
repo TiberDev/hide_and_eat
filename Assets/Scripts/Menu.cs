@@ -63,24 +63,26 @@ public class Menu : MonoBehaviour
 
     private void OnCreateButtonClicked()
     {
-        var code = nicknameInputField.text;
+        var code = codeInputField.text;
         if(string.IsNullOrWhiteSpace(code))
         {
             code = GenerateCodeRandom();
         }
 
+        StartupNetworkController.Instance.NickName = nicknameInputField.text;
         StartupNetworkController.Instance.RoomName = code;
         StartupNetworkController.Instance.StartConnecting(GameMode.Host);
     }
 
     private void OnJoinButtonClicked()
     {
-        var code = nicknameInputField.text;
+        var code = codeInputField.text;
         if(string.IsNullOrWhiteSpace(code))
         {
             code = GenerateCodeRandom();
         }
         
+        StartupNetworkController.Instance.NickName = nicknameInputField.text;
         StartupNetworkController.Instance.RoomName = code;
         StartupNetworkController.Instance.StartConnecting(GameMode.Client);
     }

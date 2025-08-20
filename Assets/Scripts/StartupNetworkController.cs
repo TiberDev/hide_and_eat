@@ -13,7 +13,8 @@ public class StartupNetworkController : MonoBehaviour
 {
     [SerializeField] private NetworkRunner networkRunnerPrefab;
     public string RoomName { get; set; } = "DefaultRoom";
-
+    
+    public string NickName { get; set; } = "Player";
 
     // Init singleton instance
     public static StartupNetworkController Instance { private set; get; }
