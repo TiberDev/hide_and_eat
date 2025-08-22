@@ -46,21 +46,9 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void SetTargetView(bool canFollow)
     {
-        if (target == null) return;
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            if (mainCineFreeLook != null)
-                mainCineFreeLook.enabled = false;
-        }
-        else if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            if (mainCineFreeLook != null)
-                mainCineFreeLook.enabled = true;
-        }
+        if (mainCineFreeLook != null)
+            mainCineFreeLook.enabled = canFollow;
     }
 }

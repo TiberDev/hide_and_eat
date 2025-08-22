@@ -11,6 +11,7 @@ public class PlayerSpawner : SimulationBehaviour, IPlayerJoined, IPlayerLeft
     public void PlayerJoined(PlayerRef player)
     {
         // Only the server can spawn.
+        Debug.Log($"Player Joined {player.IsRealPlayer}   Runner: {Runner.IsServer}");
         if (Runner.IsServer)
         {
             var networkPlayerObject = Runner.Spawn(playerObject, GetRandomSpawnPosition(), Quaternion.identity, player);

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: -2147724702155144879}
   - component: {fileID: -4924138759957491082}
   - component: {fileID: 747797371107379561}
+  - component: {fileID: 9173294013853725105}
+  - component: {fileID: -9067886521771189631}
   m_Layer: 0
   m_Name: NetworkRunner
   m_TagString: Untagged
@@ -71,3 +73,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e16ea1fd6f1e14c8a437662c5bb5b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9173294013853725105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2359277839311368787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a93abf1a391964a94e5c139605105b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsSceneTakeOverEnabled: 1
+  LogSceneLoadErrors: 1
+  DestroySpawnedPrefabsOnSceneUnload: 1
+--- !u!114 &-9067886521771189631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2359277839311368787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10533623ed629624c8acc6869f609bf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DelayIfSceneManagerIsBusy: 1

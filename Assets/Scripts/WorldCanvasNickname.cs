@@ -40,7 +40,7 @@ public class WorldCanvasNickname : MonoBehaviour
 
     private IEnumerator WaitAndDestroy()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(0.1f);
         if (target != null && !target.Equals(null))
         {
             //continue following the target

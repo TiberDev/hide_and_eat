@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Fusion;
@@ -12,6 +13,9 @@ using UnityEngine.SceneManagement;
 public class StartupNetworkController : MonoBehaviour
 {
     [SerializeField] private NetworkRunner networkRunnerPrefab;
+    
+    private NetworkRunner networkRunnerRunning;
+    
     public string RoomName { get; set; } = "DefaultRoom";
     
     public string NickName { get; set; } = "Player";
@@ -48,17 +52,25 @@ public class StartupNetworkController : MonoBehaviour
         }
     }
 
+    public void Shutdown()
+    {
+        foreach (var runner in NetworkRunner.Instances.ToList())
+        {
+            runner.Shutdown();
+        }
+    }
+
     private async UniTask Connect(GameMode serverMode)
     {
         // Ensure the NetworkRunner prefab is instantiated only once
-        networkRunnerPrefab = Instantiate(networkRunnerPrefab);
-        networkRunnerPrefab.name = "NetworkRunner";
-        DontDestroyOnLoad(networkRunnerPrefab);
+        networkRunnerRunning = Instantiate(networkRunnerPrefab);
+        networkRunnerRunning.name = "NetworkRunner";
+        DontDestroyOnLoad(networkRunnerRunning);
 
         // Get scene reference for the current scene
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
 
-        var serverTask = InitializeNetworkRunner(networkRunnerPrefab, serverMode, NetAddress.Any(), scene, null);
+        var serverTask = InitializeNetworkRunner(networkRunnerRunning, serverMode, NetAddress.Any(), scene, null);
 
         // Wait for the server to start
         await serverTask;

@@ -49,7 +49,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9386fa444f8d31d4192a340ab8cd75fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerName: 
+  _Nickname:
+    _length: 0
+    _data:
+      Data: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  anim: {fileID: 6509341558507646434}
 --- !u!114 &7294098891960218972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,9 +87,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce033547e6905c24f950de83e8568baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kcc: {fileID: 6280972881575876790}
   lookSensitivity: 0.15
-  speed: 5
+  speed: 300
   jumpForce: 10
 --- !u!114 &6280972881575876790
 MonoBehaviour:
@@ -239,6 +242,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 448899840759098814, guid: b7370ad850e591b4bb72834d4177a698, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 8688c3a28c6e6314a82307260f0f2420, type: 2}
     - target: {fileID: 468292068813783927, guid: b7370ad850e591b4bb72834d4177a698, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -1735,5 +1742,10 @@ PrefabInstance:
 --- !u!4 &915919008655800216 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5826247048328984516, guid: b7370ad850e591b4bb72834d4177a698, type: 3}
+  m_PrefabInstance: {fileID: 6660546419908526172}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6509341558507646434 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 448899840759098814, guid: b7370ad850e591b4bb72834d4177a698, type: 3}
   m_PrefabInstance: {fileID: 6660546419908526172}
   m_PrefabAsset: {fileID: 0}
