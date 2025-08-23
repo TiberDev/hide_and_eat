@@ -57,11 +57,11 @@ public class WorldCanvasNickname : MonoBehaviour
         target = newTarget;
     }
 
-    public void SetNickname(string nickname, bool inputAuthority)
+    public void SetNickname(string nickname, bool inputAuthority,bool stateAuthority)
     {
         if (worldNicknameText != null)
         {
-            worldNicknameText.text = nickname;
+            worldNicknameText.text = stateAuthority ? $"{nickname}_(Host)" : $"{nickname}_(Client)";
         }
         else
         {

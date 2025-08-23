@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CreateWorldCanvasNickname(string playerName, Transform target, bool inputAuthority)
+    public void CreateWorldCanvasNickname(string playerName, Transform target, bool inputAuthority, bool stateAuthority)
     {
         if (worldCanvasNicknamePrefab == null || nicknameHolder == null)
         {
@@ -33,6 +33,6 @@ public class GameManager : MonoBehaviour
 
         var canvasNickname = Instantiate(worldCanvasNicknamePrefab, nicknameHolder);
         canvasNickname.SetTarget(target);
-        canvasNickname.SetNickname(playerName, inputAuthority);
+        canvasNickname.SetNickname(playerName, inputAuthority, stateAuthority);
     }
 }

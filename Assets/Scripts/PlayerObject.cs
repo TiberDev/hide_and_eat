@@ -8,6 +8,10 @@ public class PlayerObject : NetworkBehaviour
 {
     private static readonly int MOVE_SPEED_ANIM_PARAMATER = Animator.StringToHash("moveSpeed");
 
+    [Networked] public PlayerRef Ref { get; set; }
+
+    [Networked] public byte Index { get; set; }
+
     [Networked, OnChangedRender(nameof(OnNicknameChanged))]
     public NetworkString<_16> Nickname { get; set; }
 
@@ -16,6 +20,14 @@ public class PlayerObject : NetworkBehaviour
     private PlayerMovement playerMovement;
 
     float moveSpeed = 0;
+
+    public void Server_Init(PlayerRef pRef, byte index)
+    {
+        Debug.Assert(Runner.IsServer);
+
+        Ref = pRef;
+        Index = index;
+    }
 
     public override void Spawned()
     {
@@ -31,7 +43,8 @@ public class PlayerObject : NetworkBehaviour
             if (!string.IsNullOrEmpty(Nickname.Value))
             {
                 gameObject.name = Nickname.Value;
-                GameManager.Instance.CreateWorldCanvasNickname(Nickname.Value, transform, false);
+                GameManager.Instance.CreateWorldCanvasNickname(Nickname.Value, transform, Object.HasInputAuthority,
+                    Object.HasStateAuthority);
             }
         }
     }
@@ -45,7 +58,8 @@ public class PlayerObject : NetworkBehaviour
     private void OnNicknameChanged()
     {
         gameObject.name = Nickname.Value;
-        GameManager.Instance.CreateWorldCanvasNickname(Nickname.Value, transform, Object.HasInputAuthority);
+        GameManager.Instance.CreateWorldCanvasNickname(Nickname.Value, transform, Object.HasInputAuthority,
+            Object.HasStateAuthority);
     }
 
     public override void Render()

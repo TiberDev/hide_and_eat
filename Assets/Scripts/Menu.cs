@@ -110,14 +110,12 @@ public class Menu : MonoBehaviour
     private void OnContinueButtonClicked()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        CameraFollow.Instance.SetTargetView(true);
         SetScreen(ScreenType.GamePlay);
     }
 
     private void OnLeaveButtonClicked()
     {
         StartupNetworkController.Instance.Shutdown();
-        SetScreen(ScreenType.JoinRoom);
     }
 
     private string GenerateCodeRandom(int length = 4)
@@ -147,6 +145,11 @@ public class Menu : MonoBehaviour
             StartLoadingText();
         else
             StopLoadingText();
+
+        if (screen == ScreenType.GamePlay)
+        {
+            CameraFollow.Instance.SetTargetView(true);
+        }
     }
 
     private void StartLoadingText()

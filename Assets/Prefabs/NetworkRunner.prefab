@@ -61,6 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerObject: {fileID: 7294098891960218972, guid: a9f6e26adab29284ba8c97c4975a3cc2, type: 3}
+  playerRegistryPrefab: {fileID: 3583563962316067793, guid: abc5c1933d877b446a1a46d43ceb2a27, type: 3}
 --- !u!114 &747797371107379561
 MonoBehaviour:
   m_ObjectHideFlags: 0

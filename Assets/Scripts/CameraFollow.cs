@@ -8,10 +8,13 @@ using UnityEngine.EventSystems;
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private CinemachineFreeLook mainCineFreeLook;
-    [SerializeField] private CinemachineVirtualCamera mainCineVirtualCamera;
 
     private Transform target;
     private Transform cachedTransform;
+
+    private float originFreeLookMaxSpeedX; // Original max speed for X axis
+    private float originFreeLookMaxSpeedY; // Original max speed for Y axis
+
     public Transform Transform => cachedTransform;
 
     public static CameraFollow Instance { private set; get; }
@@ -28,6 +31,12 @@ public class CameraFollow : MonoBehaviour
         }
 
         cachedTransform = transform;
+
+        if (mainCineFreeLook != null)
+        {
+            originFreeLookMaxSpeedX = mainCineFreeLook.m_XAxis.m_MaxSpeed;
+            originFreeLookMaxSpeedY = mainCineFreeLook.m_YAxis.m_MaxSpeed;
+        }
     }
 
     public void SetTarget(Transform newTarget)
@@ -38,17 +47,24 @@ public class CameraFollow : MonoBehaviour
             mainCineFreeLook.Follow = target;
             mainCineFreeLook.LookAt = target;
         }
-
-        if (mainCineVirtualCamera != null)
-        {
-            mainCineVirtualCamera.Follow = target;
-            mainCineVirtualCamera.LookAt = target;
-        }
     }
 
     public void SetTargetView(bool canFollow)
     {
-        if (mainCineFreeLook != null)
-            mainCineFreeLook.enabled = canFollow;
+        if (mainCineFreeLook == null) return;
+        
+        // mainCineFreeLook.enabled = canFollow;
+        
+        if (canFollow)
+        {
+            mainCineFreeLook.m_XAxis.m_MaxSpeed = originFreeLookMaxSpeedX;
+            mainCineFreeLook.m_YAxis.m_MaxSpeed = originFreeLookMaxSpeedY;
+        }
+        else
+        {
+            mainCineFreeLook.m_XAxis.m_MaxSpeed = 0;
+            mainCineFreeLook.m_YAxis.m_MaxSpeed = 0;
+        }
+        
     }
 }

@@ -18,7 +18,6 @@ public class KeyboardInputController : MonoBehaviour
             else if (Menu.Instance.CurrentUIType == Menu.ScreenType.Escape)
             {
                 Cursor.lockState = CursorLockMode.Locked;
-                CameraFollow.Instance.SetTargetView(true);
                 Menu.Instance.SetScreen(Menu.ScreenType.GamePlay);
             }
         }
